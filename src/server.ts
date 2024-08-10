@@ -11,13 +11,16 @@ import {
   sendingMsg,
   saveMessages,
 } from "./middleware/socketmiddleware";
-import Chat from "./model/chat";
+import cors from 'cors';
+
 
 const app = Express();
 
 const httpServer = createServer(app);
 
 const io = new Server(httpServer);
+
+app.use(cors());
 
 //token authentication for socket connection
 io.use(socketMiddleware);

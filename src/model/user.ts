@@ -10,6 +10,7 @@ const userSchema = new Schema(
     },
     password: String,
     confirmPassword: String,
+    active:{type:Boolean,default:false}
    
     // emailVerified: {
     //   type: Boolean,
@@ -29,6 +30,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   confirmPassword: string;
+  active:boolean;
 //   emailVerified:boolean;
 //   role:string;
 }
