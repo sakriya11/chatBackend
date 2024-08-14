@@ -7,6 +7,7 @@ const config = {
     port: process.env.PORT,
     host: process.env.HOST,
     url: process.env.URL,
+    allowedOrigin:process.env.ALLOWED_ORIGIN
   },
   db:{
     mongoURL:process.env.MONGO_URL

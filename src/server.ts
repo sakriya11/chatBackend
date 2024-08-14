@@ -10,6 +10,7 @@ import {
   deleteUserSocketId,
   sendingMsg,
   saveMessages,
+  socketCorsMiddleware,
 } from "./middleware/socketmiddleware";
 import cors from 'cors';
 
@@ -18,7 +19,15 @@ const app = Express();
 
 const httpServer = createServer(app);
 
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000", // The frontend address
+    methods: ["GET", "POST"], // Allowable methods
+    credentials: true, // Allow credentials (e.g., cookies)
+  },
+});
+
+io.use(socketCorsMiddleware);
 
 app.use(cors());
 
@@ -34,8 +43,7 @@ io.on("connection", (socket) => {
 
   //msg sending event
   socket.on("sendmsg", (data) => {
-    console.log("data", data);
-    sendingMsg(socket, data.msg);
+    sendingMsg(socket, data);
     const receiverId = socket.handshake.query.userId as string;
     //storring coversation to db
     saveMessages(userId, receiverId, data.msg);

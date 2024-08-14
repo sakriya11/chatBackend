@@ -3,8 +3,10 @@ import { Socket } from "socket.io";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import Chat from "../model/chat";
+import allowOrigin from '../config/index';
 
 const userSocketId = new Map<string, string>();
+const allowedOrigin = allowOrigin.app.allowedOrigin;
 
 export const socketMiddleware = (socket: Socket, next: NextFunction) => {
   try {
@@ -53,7 +55,9 @@ export const sendingMsg = (socket: Socket, msg: string) => {
     const userId = socket.handshake.query.userId as string;
     const userSocketId = getUserSocketIdFromUserId(userId);
     if (userSocketId) {
+      console.log("sdsd",msg)
       socket.to(userSocketId).emit("receivemsg", {
+        
         msg,
       });
     } else {
@@ -79,3 +83,20 @@ export const saveMessages = async (
     console.log("error storing the messages");
   }
 };
+
+export const socketCorsMiddleware = async (socket:Socket,next:NextFunction) => {
+  try {
+    const origin = socket.handshake.headers.host;
+console.log(origin)
+console.log(allowedOrigin)
+    if(origin && allowedOrigin.includes(origin)){
+      next();
+    }
+    else {
+      const err = new Error("CORS error: Origin not allowed");
+      next(err); // Deny the connection
+    }
+  } catch (error) {
+    console.log("socket cors error",error)
+  }
+}
