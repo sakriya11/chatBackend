@@ -16,9 +16,11 @@ export const socketMiddleware = (socket: Socket, next: NextFunction) => {
     }
     const tokenVerification = jwt.verify(token, config.jwt.secret);
     socket.data.user = tokenVerification;
-
-    console.log("socket user details", socket.data.user);
-    next();
+    if(tokenVerification){
+      console.log("socket user details", socket.data.user);
+      next();
+    }
+    
   } catch (error) {
     console.log("socket middleware error", error);
   }
