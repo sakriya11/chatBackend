@@ -1,25 +1,41 @@
-import {Request,Response} from 'express';
-import User from '../model/user';
+import { Request, Response } from "express";
+import User from "../model/user";
 
-const chatController = {
-    totalUsers: async (req:Request,res:Response):Promise<Response> => {
-        try {
-            const totalUsers = await User.find();
-            console.log(totalUsers);
-            if(totalUsers){
-                return res.status(200).send({
-                    data:totalUsers
-                })
-            }else{
-                return 
-            }
-            
-        } catch (error) {
-            return res.status(500).send({
-                message:"error fetching the users"
-            })
-        }
-    }
+interface responseData {
+  id: string;
+  name: string;
 }
 
-export default chatController
+const chatController = {
+  totalUsers: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const totalUsers = await User.find();
+      if (totalUsers) {
+        const userList: responseData[] = [];
+
+        totalUsers.forEach((data) => {
+          const trimedData = {
+            name: data.fullName,
+            id: data.id,
+          };
+          userList.push(trimedData);
+        });
+
+        return res.status(200).send({
+          data: userList,
+        });
+      } else {
+        return res.status(404).send({
+          message: "No users found",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return res.status(500).send({
+        message: "Error fetching the users",
+      });
+    }
+  },
+};
+
+export default chatController;
