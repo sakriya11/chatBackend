@@ -1,47 +1,91 @@
 import { Request, Response } from "express";
 import User from "../model/user";
 import bcrypt from "bcryptjs";
-// import { Key } from "../models/key";
-import { randomBytes } from "crypto";
-// import { genRandomNumber } from "../helper/generator";
 import jwt from "jsonwebtoken";
 import config from "../config";
+import Token from '../model/token';
+import { mailOption, sendEmail, transport } from "../services/emailverification";
+import { genRandomNumber } from "../helper/generator";
 // import {  socketTokenValidation } from "../config/socket/socketConnection";
 
 const authController = {
-  registration: async (req: Request, res: Response): Promise<Response> => {
+  
+  userRegistration: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { name, email, password } = req.body;
-
-      const ifEmailExist = await User.findOne({ email: email });
-
-      if (!ifEmailExist) {
+      const { fullName, email, password, confirmPassword} = req.body;
+      // console.log("request",req.body);
+      const emailExist = await User.findOne({
+        email: email,
+      });
+      if (emailExist) {
         return res.status(409).send({
-          message: "The given email is already taken use another",
+          message: "Given email id already exist",
+        });
+      }
+      if (password !== confirmPassword) {
+        return res.status(409).send({
+          message: "Password and confirm password did not match",
         });
       }
 
       const registerUser = await User.create({
-        name: name,
-        email: email,
+        fullName,
+        email,
         password: bcrypt.hashSync(password),
       });
 
-      //   const _token = await Key.create({
-      //     userId: registerUser.id,
-      //     key: randomBytes(32).toString("hex"),
-      //     token: genRandomNumber().toString(),
-      //   });
+      const emailVerificationToken = await Token.create({
+        user: registerUser.id,
+        token: genRandomNumber(),
+      });
+      const option = mailOption(
+        registerUser.email,
+        registerUser.fullName,
+        emailVerificationToken.token
+      );
+      await sendEmail(option, transport);
 
       return res.status(200).send({
-        message: "User registered succesfully",
-        data: registerUser,
-        // key: _token.key,
+        message: "user registered succesfully",
       });
     } catch (error) {
-      console.log(error);
+      console.log("registration error", error);
+      return res.status(500).send({
+        message: "Registration error",
+      });
     }
   },
+
+  emailVerification: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { verificationCode } = req.body;
+      const verifyCode = Number(verificationCode);
+
+      const tokenExist = await Token.findOne({
+        token: verifyCode,
+      });
+
+      if (tokenExist) {
+        await User.findByIdAndUpdate(tokenExist.user, {
+          emailVerified: true,
+        });
+        return res.status(200).send({
+          message: "Email verified succesfully",
+        });
+      } else {
+        return res.status(409).send({
+          message:
+            "Email verification failed please sign up and resend the verification code ",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "email not verified",
+      });
+    }
+  },
+
   login: async (req: Request, res: Response): Promise<Response> => {
     try {
       const { email, password } = req.body;

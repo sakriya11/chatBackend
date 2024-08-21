@@ -19,6 +19,13 @@ const config = {
     token_ttl_seconds:
       Number(process.env.JWT_TOKEN_TTL_SECONDS) || 24 * 60 * 60,
   },
+  email:{
+    sender_email: process.env.SENDER_EMAIL,
+    sender_email_pass: process.env.SENDER_EMAIL_PASS, //app password
+    email_service: process.env.EMAIL_SERVICE,
+    host: "smtp.gmail.com",
+    port: 587,
+  }
 };
 
 export default config;

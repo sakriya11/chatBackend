@@ -10,12 +10,12 @@ const userSchema = new Schema(
     },
     password: String,
     confirmPassword: String,
-    active:{type:Boolean,default:false}
+    active:{type:Boolean,default:false},
    
-    // emailVerified: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
     // role:{
     //   type:String,
     //   enum:["user","admin"],
@@ -31,7 +31,7 @@ export interface IUser extends Document {
   password: string;
   confirmPassword: string;
   active:boolean;
-//   emailVerified:boolean;
+  emailVerified:boolean;
 //   role:string;
 }
 

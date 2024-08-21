@@ -23,7 +23,7 @@ const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000", // The frontend address
     methods: ["GET", "POST"], // Allowable methods
-    // credentials: true, 
+    credentials: true, 
   },
 });
 

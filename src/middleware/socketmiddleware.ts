@@ -55,7 +55,10 @@ export const deleteUserSocketId = (userId: string) => {
 export const sendingMsg = (socket: Socket, msg: string) => {
   try {
     const userId = socket.handshake.query.userId as string;
+    console.log("userisssss",userId)
     const userSocketId = getUserSocketIdFromUserId(userId);
+    console.log("userisssss",userSocketId)
+
     if (userSocketId) {
       console.log("sdsd",msg)
       socket.to(userSocketId).emit("receivemsg", {
