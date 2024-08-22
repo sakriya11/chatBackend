@@ -42,7 +42,7 @@ export const mailOption = (
     to: to,
     subject: "Email verification code",
     html: `Hello ${name} welcome to chat application. 
-    Your registeration code is ${code}`,
+    Your registeration code is  ${code}`,
   };
 };
 

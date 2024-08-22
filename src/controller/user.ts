@@ -3,16 +3,19 @@ import User from "../model/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "../config";
-import Token from '../model/token';
-import { mailOption, sendEmail, transport } from "../services/emailverification";
+import Token from "../model/token";
+import {
+  mailOption,
+  sendEmail,
+  transport,
+} from "../services/emailverification";
 import { genRandomNumber } from "../helper/generator";
 // import {  socketTokenValidation } from "../config/socket/socketConnection";
 
 const authController = {
-  
   userRegistration: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { fullName, email, password, confirmPassword} = req.body;
+      const { fullname, email, password, confirmpassword } = req.body;
       // console.log("request",req.body);
       const emailExist = await User.findOne({
         email: email,
@@ -22,14 +25,14 @@ const authController = {
           message: "Given email id already exist",
         });
       }
-      if (password !== confirmPassword) {
+      if (password !== confirmpassword) {
         return res.status(409).send({
           message: "Password and confirm password did not match",
         });
       }
 
       const registerUser = await User.create({
-        fullName,
+        fullname,
         email,
         password: bcrypt.hashSync(password),
       });
@@ -40,13 +43,13 @@ const authController = {
       });
       const option = mailOption(
         registerUser.email,
-        registerUser.fullName,
+        registerUser.fullname,
         emailVerificationToken.token
       );
       await sendEmail(option, transport);
 
       return res.status(200).send({
-        message: "user registered succesfully",
+        message: "Enter the code provided to your email",
       });
     } catch (error) {
       console.log("registration error", error);
@@ -70,7 +73,7 @@ const authController = {
           emailVerified: true,
         });
         return res.status(200).send({
-          message: "Email verified succesfully",
+          message: "Email verified and user registered succesfully",
         });
       } else {
         return res.status(409).send({
@@ -94,6 +97,11 @@ const authController = {
         return res.status(404).send({
           message: "User does not exist please register",
         });
+      }
+      if(user.emailVerified == false){
+        return res.status(409).send({
+          message:"Verify email and try logging back to your account"
+        })
       }
       const passwordIsValid = bcrypt.compareSync(password, user.password);
       if (!passwordIsValid) {

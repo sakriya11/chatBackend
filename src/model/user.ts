@@ -2,14 +2,14 @@ import { Schema, Document, model } from "mongoose";
 
 const userSchema = new Schema(
   {
-    fullName: String,
+    fullname: String,
     email: {
       type: String,
       required: [true, "Email address is required"],
       unique: true,
     },
     password: String,
-    confirmPassword: String,
+    confirmpassword: String,
     active:{type:Boolean,default:false},
    
     emailVerified: {
@@ -26,10 +26,10 @@ const userSchema = new Schema(
 );
 
 export interface IUser extends Document {
-  fullName: string;
+  fullname: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmpassword: string;
   active:boolean;
   emailVerified:boolean;
 //   role:string;

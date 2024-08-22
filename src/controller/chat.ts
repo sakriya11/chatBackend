@@ -9,13 +9,17 @@ interface responseData {
 const chatController = {
   totalUsers: async (req: Request, res: Response): Promise<Response> => {
     try {
-      const totalUsers = await User.find();
+      const userToken = req.header;
+      console.log(userToken);
+
+      const totalUsers = (await User.find());
       if (totalUsers) {
         const userList: responseData[] = [];
 
         totalUsers.forEach((data) => {
+          
           const trimedData = {
-            name: data.fullName,
+            name: data.fullname,
             id: data.id,
           };
           userList.push(trimedData);
