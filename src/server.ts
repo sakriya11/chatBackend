@@ -21,7 +21,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:3000","https://domainname.com"], // The frontend address
+    origin:"https://domainname.com", // The frontend address
     methods: ["GET", "POST"], // Allowable methods
     credentials: true, 
   },
