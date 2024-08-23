@@ -43,7 +43,7 @@ const io = new Server(httpServer, {
   },
 });
 
-io.use(socketCorsMiddleware);
+// io.use(socketCorsMiddleware);
 
 app.use(cors());
 
