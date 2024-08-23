@@ -10,36 +10,33 @@ import {
   deleteUserSocketId,
   sendingMsg,
   saveMessages,
-  socketCorsMiddleware,
 } from "./middleware/socketmiddleware";
-import cors from 'cors';
-
+import cors from "cors";
 
 const app = Express();
 // CORS for Express routes
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (e.g., mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (config.app.allowedOrigin.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,  // Allow cookies or credentials if needed
-}));
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (!origin) return callback(null, true);
 
+//       if (config.app.allowedOrigin.indexOf(origin) !== -1) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true, // Allow cookies or credentials if needed
+//   })
+// );
 
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
-  cors: {
-    origin:"https://chatfrontend-omega.vercel.app", // The frontend address
-    methods: ["GET", "POST"], // Allowable methods
-    // credentials: true, 
-  },
+  cors:{
+    origin:"*",
+    methods:["GET","POST"]
+  }
 });
 
 // io.use(socketCorsMiddleware);
