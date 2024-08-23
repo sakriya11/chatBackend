@@ -9,6 +9,7 @@ interface responseData {
 const chatController = {
   totalUsers: async (req: Request, res: Response): Promise<Response> => {
     try {
+      console.log("origin",req.headers.origin);
       const userToken = req.header;
       console.log(userToken);
 
