@@ -14,68 +14,63 @@ import {
 import cors from "cors";
 
 const app = Express();
-// CORS for Express routes
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin) return callback(null, true);
 
-//       if (config.app.allowedOrigin.indexOf(origin) !== -1) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true, // Allow cookies or credentials if needed
-//   })
-// );
+// CORS for Express routes
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests from the specified origins
+      if (!origin || config.app.allowedOrigin.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies or credentials if needed
+  })
+);
 
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, 
-//   {
-//   cors:{
-//     origin:"*",
-//     methods:["GET","POST"]
-//   }
-// }
-);
+const io = new Server(httpServer, {
+  cors: {
+    origin: config.app.allowedOrigin, // Allow specific origins
+    methods: ["GET", "POST"],
+    credentials: true, // Allow credentials (cookies) if needed
+  },
+});
 
-// io.use(socketCorsMiddleware);
-
-app.use(cors());
-
-//token authentication for socket connection
+// Middleware for socket connections
 io.use(socketMiddleware);
 
-//socket connection
+// Handle socket connections
 io.on("connection", (socket) => {
   console.log("user active", socket.id);
   const userId = socket.data.user.id;
   const socketId = socket.id;
   storingUserSocketId(socketId, userId);
 
-  //msg sending event
+  // Handle message sending
   socket.on("sendmsg", (data) => {
     sendingMsg(socket, data);
     const receiverId = socket.handshake.query.userId as string;
-    //storring coversation to db
     saveMessages(userId, receiverId, data.msg);
   });
 
+  // Handle disconnection
   socket.on("disconnect", () => {
     deleteUserSocketId(userId);
   });
 });
 
-// server.use(helmet()); //for security
+// Additional Express configuration
 app.use(Express.json());
 app.use("/api", routes);
 
-// /db connection
-db.on("error", console.error.bind(console, "MongoDB connection errorrr:"));
+// Database connection
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.on("close", function () {
-  console.log("DB connection is close");
+  console.log("DB connection is closed");
 });
 db.once("open", function () {
   console.log("Connected to MongoDB database!!");
