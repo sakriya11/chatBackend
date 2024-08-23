@@ -13,7 +13,7 @@ const config = {
     mongoURL:process.env.MONGO_URL
   },
   jwt: {
-    secret: process.env.JWT_SECRET || "hellochangethissecretonenv",
+    secret: process.env.JWT_SECRET ,
     issuer: process.env.JWT_ISSUER || "Backend",
     token_ttl: process.env.JWT_TOKEN_TTL || "1d",
     token_ttl_seconds:
