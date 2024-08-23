@@ -17,11 +17,27 @@ import cors from 'cors';
 
 const app = Express();
 
+// CORS for Express routes
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g., mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (config.app.allowedOrigin.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,  // Allow cookies or credentials if needed
+}));
+
+
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin:"https://domainname.com", // The frontend address
+    origin:config.app.allowedOrigin, // The frontend address
     methods: ["GET", "POST"], // Allowable methods
     credentials: true, 
   },
