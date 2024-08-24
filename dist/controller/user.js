@@ -90,6 +90,7 @@ const authController = {
     }),
     login: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            console.log("allowed origin", config_1.default.app.allowedOrigin);
             const { email, password } = req.body;
             const user = yield user_1.default.findOne({ email: email });
             if (!user) {

@@ -30,13 +30,14 @@ const config = {
         port: process.env.PORT,
         host: process.env.HOST,
         url: process.env.URL,
-        allowedOrigin: process.env.ALLOWED_ORIGIN
+        allowedOrigin: process.env.ALLOWED_ORIGIN,
+        originRegex: process.env.ORIGIN_REGEX
     },
     db: {
         mongoURL: process.env.MONGO_URL
     },
     jwt: {
-        secret: process.env.JWT_SECRET || "hellochangethissecretonenv",
+        secret: process.env.JWT_SECRET,
         issuer: process.env.JWT_ISSUER || "Backend",
         token_ttl: process.env.JWT_TOKEN_TTL || "1d",
         token_ttl_seconds: Number(process.env.JWT_TOKEN_TTL_SECONDS) || 24 * 60 * 60,

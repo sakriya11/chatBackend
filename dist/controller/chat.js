@@ -16,6 +16,7 @@ const user_1 = __importDefault(require("../model/user"));
 const chatController = {
     totalUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            console.log("origin", req.headers.origin);
             const userToken = req.header;
             console.log(userToken);
             const totalUsers = (yield user_1.default.find());
