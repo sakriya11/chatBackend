@@ -16,34 +16,32 @@ import cors from "cors";
 
 const app = Express();
 
-
+const originRegex = new RegExp(config.app.originRegex);
 // CORS for Express routes
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests from the specified origins
-      if (!origin || config.app.allowedOrigin.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // Allow cookies or credentials if needed
-  })
-);
-
+const corsOption = {
+  credentials: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  origin: function (origin: string, callback: any) {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+    if (config.app.allowedOrigin.indexOf(origin) !== -1 || originRegex.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
 const httpServer = createServer(app);
 
 const io = new Server(httpServer,
   {
-  cors: {
-    
-    origin: "https://chatfrontend-omega.vercel.app", // Allow specific origins
-    methods: ["GET", "POST"],
-    credentials: true, // Allow credentials (cookies) if needed
-  },
+  cors: corsOption
 }
 );
+
+app.use(cors(corsOption));
 //  io.use(socketCorsMiddleware);
 
 // Middleware for socket connections
