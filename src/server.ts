@@ -16,7 +16,6 @@ import cors from "cors";
 
 const app = Express();
 
-console.log("allowed origin",config.app.allowedOrigin);
 
 // CORS for Express routes
 app.use(
