@@ -10,7 +10,7 @@ import {
   deleteUserSocketId,
   sendingMsg,
   saveMessages,
-  socketCorsMiddleware,
+  // socketCorsMiddleware,
 } from "./middleware/socketmiddleware";
 import cors from "cors";
 
@@ -33,22 +33,24 @@ app.use(
 
 const httpServer = createServer(app);
 
-const io = new Server(httpServer
-//   {
-//   cors: {
-//     origin: config.app.allowedOrigin, // Allow specific origins
-//     methods: ["GET", "POST"],
-//     credentials: true, // Allow credentials (cookies) if needed
-//   },
-// }
+const io = new Server(httpServer,
+  {
+  cors: {
+    
+    origin: config.app.allowedOrigin, // Allow specific origins
+    methods: ["GET", "POST"],
+    credentials: true, // Allow credentials (cookies) if needed
+  },
+}
 );
- io.use(socketCorsMiddleware);
+//  io.use(socketCorsMiddleware);
 
 // Middleware for socket connections
 io.use(socketMiddleware);
 
 // Handle socket connections
 io.on("connection", (socket) => {
+  console.log('Origin:', socket.handshake.headers.origin);
   console.log("user active", socket.id);
   const userId = socket.data.user.id;
   const socketId = socket.id;
