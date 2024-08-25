@@ -18,21 +18,21 @@ const app = Express();
 
 const originRegex = new RegExp(config.app.originRegex);
 // CORS for Express routes
-const corsOption = {
-  credentials: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  origin: function (origin: string, callback: any) {
-    if (!origin) {
-      callback(null, true);
-      return;
-    }
-    if (config.app.allowedOrigin.indexOf(origin) !== -1 || originRegex.test(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
+// const corsOption = {
+//   credentials: true,
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   origin: function (origin: string, callback: any) {
+//     if (!origin) {
+//       callback(null, true);
+//       return;
+//     }
+//     if (config.app.allowedOrigin.indexOf(origin) !== -1 || originRegex.test(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
 const httpServer = createServer(app);
 
 const io = new Server(httpServer,
