@@ -91,7 +91,7 @@ const authController = {
 
   login: async (req: Request, res: Response): Promise<Response> => {
     try {
-
+        console.log("headers",req.headers.origin)
       const { email, password } = req.body;
       const user = await User.findOne({ email: email });
       if (!user) {
