@@ -37,7 +37,10 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer,
   {
-  cors: corsOption
+  cors: {
+    origin:"https://chatfrontend-omega.vercel.app",
+    methods:["POST","GET"]
+  }
 }
 );
 
