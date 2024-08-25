@@ -30,7 +30,7 @@ const config = {
         port: process.env.PORT,
         host: process.env.HOST,
         url: process.env.URL,
-        allowedOrigin: process.env.ALLOWED_ORIGIN,
+        allowedOrigin: process.env.ALLOWED_ORIGIN || "https://chatfrontend-omega.vercel.app",
         originRegex: process.env.ORIGIN_REGEX
     },
     db: {

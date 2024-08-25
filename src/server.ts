@@ -44,7 +44,7 @@ const io = new Server(httpServer,
 }
 );
 
-app.use(cors(corsOption));
+app.use(cors());
 //  io.use(socketCorsMiddleware);
 
 // Middleware for socket connections

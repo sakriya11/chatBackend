@@ -37,7 +37,7 @@ const io = new socket_io_1.Server(httpServer, {
         methods: ["POST", "GET"]
     }
 });
-app.use((0, cors_1.default)(corsOption));
+app.use((0, cors_1.default)());
 //  io.use(socketCorsMiddleware);
 // Middleware for socket connections
 io.use(socketmiddleware_1.socketMiddleware);
