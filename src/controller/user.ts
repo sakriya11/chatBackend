@@ -91,7 +91,6 @@ const authController = {
 
   login: async (req: Request, res: Response): Promise<Response> => {
     try {
-console.log("allowed origin",config.app.allowedOrigin);
 
       const { email, password } = req.body;
       const user = await User.findOne({ email: email });
