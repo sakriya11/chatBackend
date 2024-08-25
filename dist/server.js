@@ -38,7 +38,7 @@ const io = new socket_io_1.Server(httpServer, {
 });
 // app.use(cors());
 app.use((0, cors_1.default)({
-    origin: index_1.default.app.allowedOrigin,
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));

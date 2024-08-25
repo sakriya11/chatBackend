@@ -48,7 +48,7 @@ const io = new Server(httpServer,
 
 
 app.use(cors({
-  origin: config.app.allowedOrigin,
+  origin: "*",
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'] 
 }));
