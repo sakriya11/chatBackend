@@ -37,7 +37,12 @@ const io = new socket_io_1.Server(httpServer, {
         methods: ["POST", "GET"]
     }
 });
-app.use((0, cors_1.default)());
+// app.use(cors());
+app.use((0, cors_1.default)({
+    origin: 'https://chatfrontend-omega.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 //  io.use(socketCorsMiddleware);
 // Middleware for socket connections
 io.use(socketmiddleware_1.socketMiddleware);
