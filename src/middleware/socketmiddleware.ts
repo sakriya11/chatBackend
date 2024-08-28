@@ -37,6 +37,7 @@ export const storingUserSocketId = (socketId: string, userId: string) => {
 
 export const getUserSocketIdFromUserId = (userId: string) => {
   try {
+    console.log("storedid",userSocketId)
     return userSocketId.get(userId);
   } catch (error) {
     console.log(error);
