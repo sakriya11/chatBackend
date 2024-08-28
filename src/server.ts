@@ -68,9 +68,14 @@ io.on("connection", (socket) => {
 
   // Handle message sending
   socket.on("sendmsg", (data) => {
-    sendingMsg(socket, data);
-    const receiverId = socket.handshake.query.userId as string;
-    saveMessages(userId, receiverId, data.msg);
+    // sendingMsg(socket, data);
+    // const receiverId = socket.handshake.query.userId as string;
+    // saveMessages(userId, receiverId, data.msg);
+
+    const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
+  const receiverId = socket.handshake.query.userId as string; // Assuming this is the recipient's ID
+  sendingMsg(socket, data); 
+  saveMessages(senderId, receiverId, data.msg); 
   });
 
   // Handle disconnection
