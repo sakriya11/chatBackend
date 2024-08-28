@@ -21,7 +21,7 @@ const userSocketId = new Map();
 const allowedOrigin = index_1.default.app.allowedOrigin;
 const socketMiddleware = (socket, next) => {
     try {
-        const token = socket.handshake.query.token;
+        const token = socket.handshake.auth.token;
         if (!token) {
             return next(new Error("socket auth error"));
         }
@@ -49,6 +49,7 @@ const storingUserSocketId = (socketId, userId) => {
 exports.storingUserSocketId = storingUserSocketId;
 const getUserSocketIdFromUserId = (userId) => {
     try {
+        console.log("storedid", userSocketId);
         return userSocketId.get(userId);
     }
     catch (error) {

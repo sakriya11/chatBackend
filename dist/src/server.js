@@ -38,7 +38,7 @@ const io = new socket_io_1.Server(httpServer, {
 });
 // app.use(cors());
 app.use((0, cors_1.default)({
-    origin: "*",
+    origin: "https://chatfrontend-omega.vercel.app",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -54,9 +54,13 @@ io.on("connection", (socket) => {
     (0, socketmiddleware_1.storingUserSocketId)(socketId, userId);
     // Handle message sending
     socket.on("sendmsg", (data) => {
+        // sendingMsg(socket, data);
+        // const receiverId = socket.handshake.query.userId as string;
+        // saveMessages(userId, receiverId, data.msg);
+        const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
+        const receiverId = socket.handshake.query.userId; // Assuming this is the recipient's ID
         (0, socketmiddleware_1.sendingMsg)(socket, data);
-        const receiverId = socket.handshake.query.userId;
-        (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg);
+        (0, socketmiddleware_1.saveMessages)(senderId, receiverId, data.msg);
     });
     // Handle disconnection
     socket.on("disconnect", () => {
