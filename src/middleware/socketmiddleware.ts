@@ -10,7 +10,7 @@ const allowedOrigin = allowOrigin.app.allowedOrigin;
 
 export const socketMiddleware = (socket: Socket, next: NextFunction) => {
   try {
-    const token = socket.handshake.auth.token as string;
+    const token = socket.handshake.query.token as string;
     
     if (!token) {
       return next(new Error("socket auth error"));

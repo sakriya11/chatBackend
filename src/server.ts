@@ -49,7 +49,7 @@ const io = new Server(httpServer,
 
 
 app.use(cors({
-  origin: "https://chatfrontend-omega.vercel.app",
+  origin: "https://chatfrontend-omega.vercel.app"||"http://localhost:3000",
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'] 
 }));
