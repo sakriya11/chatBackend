@@ -60,9 +60,11 @@ io.use(socketMiddleware);
 
 // Handle socket connections
 io.on("connection", (socket) => {
-  console.log('Origin:', socket.handshake.headers.origin);
-  console.log("user active", socket.id);
+  
   const userId = socket.data.user.id;
+
+  //joining the user into room 
+  socket.join(userId);
   const socketId = socket.id;
   storingUserSocketId(socketId, userId);
 
