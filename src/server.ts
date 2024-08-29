@@ -35,24 +35,22 @@ const originRegex = new RegExp(config.app.originRegex);
 // };
 const httpServer = createServer(app);
 
-const io = new Server(httpServer,
-  {
+const io = new Server(httpServer, {
   cors: {
-    origin:config.app.allowedOrigin,
-    methods:["POST","GET"]
-  }
-}
-);
+    origin: config.app.allowedOrigin,
+    methods: ["POST", "GET"],
+  },
+});
 
 // app.use(cors());
 
-
-
-app.use(cors({
-  origin: "https://chatfrontend-omega.vercel.app"||"http://localhost:3000",
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-  allowedHeaders: ['Content-Type', 'Authorization'] 
-}));
+app.use(
+  cors({
+    origin: "https://chatfrontend-omega.vercel.app" || "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 //  io.use(socketCorsMiddleware);
 
 // Middleware for socket connections
@@ -60,10 +58,12 @@ io.use(socketMiddleware);
 
 // Handle socket connections
 io.on("connection", (socket) => {
-  
   const userId = socket.data.user.id;
-
-  //joining the user into room 
+  if (!userId) {
+    console.error("User ID is missing in socket connection");
+    return;
+  }
+  //joining the user into room
   socket.join(userId);
   const socketId = socket.id;
   storingUserSocketId(socketId, userId);
@@ -74,10 +74,10 @@ io.on("connection", (socket) => {
     const receiverId = socket.handshake.query.userId as string;
     saveMessages(userId, receiverId, data.msg);
 
-  //   const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
-  // const receiverId = socket.handshake.query.userId as string; // Assuming this is the recipient's ID
-  // sendingMsg(socket, data); 
-  // saveMessages(senderId, receiverId, data.msg); 
+    //   const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
+    // const receiverId = socket.handshake.query.userId as string; // Assuming this is the recipient's ID
+    // sendingMsg(socket, data);
+    // saveMessages(senderId, receiverId, data.msg);
   });
 
   // Handle disconnection
