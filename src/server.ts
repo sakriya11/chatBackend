@@ -64,7 +64,10 @@ io.on("connection", (socket) => {
     return;
   }
   //joining the user into room
-  socket.join(userId);
+  socket.on('join',({userid})=>{
+    socket.join(userId);
+
+  })
   const socketId = socket.id;
   storingUserSocketId(socketId, userId);
 
