@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
   //joining the user into room
   socket.on('join',({userid})=>{
     socket.join(userId);
+    console.log(userId,"joined the room")
 
   })
   const socketId = socket.id;
