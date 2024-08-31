@@ -3,7 +3,7 @@ import { Socket } from "socket.io";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import Chat from "../model/chat";
-import allowOrigin from '../config/index';
+import allowOrigin from "../config/index";
 
 const userSocketId = new Map<string, string>();
 const allowedOrigin = allowOrigin.app.allowedOrigin;
@@ -11,17 +11,16 @@ const allowedOrigin = allowOrigin.app.allowedOrigin;
 export const socketMiddleware = (socket: Socket, next: NextFunction) => {
   try {
     const token = socket.handshake.auth.token as string;
-    
+
     if (!token) {
       return next(new Error("socket auth error"));
     }
     const tokenVerification = jwt.verify(token, config.jwt.secret);
     socket.data.user = tokenVerification;
-    if(tokenVerification){
+    if (tokenVerification) {
       console.log("socket user details", socket.data.user);
       next();
     }
-    
   } catch (error) {
     console.log("socket middleware error", error);
   }
@@ -38,7 +37,7 @@ export const storingUserSocketId = (socketId: string, userId: string) => {
 
 export const getUserSocketIdFromUserId = (userId: string) => {
   try {
-    console.log("storedid",userSocketId)
+    console.log("storedid", userSocketId);
     return userSocketId.get(userId);
   } catch (error) {
     console.log(error);
@@ -57,14 +56,13 @@ export const deleteUserSocketId = (userId: string) => {
 export const sendingMsg = (socket: Socket, msg: string) => {
   try {
     const userId = socket.handshake.query.userId as string;
-    console.log("userisssss",userId)
+    console.log("receiver id ", userId);
     const userSocketId = getUserSocketIdFromUserId(userId);
-    console.log("userisssss",userSocketId)
+    console.log("receiver socketid", userSocketId);
 
     if (userSocketId) {
-      console.log("sdsd",msg)
+      console.log("socket id to receive  the mesages", msg);
       socket.to(userSocketId).emit("receivemsg", {
-        
         msg,
       });
     } else {
@@ -91,19 +89,21 @@ export const saveMessages = async (
   }
 };
 
-export const socketCorsMiddleware = async (socket:Socket,next:NextFunction) => {
+export const socketCorsMiddleware = async (
+  socket: Socket,
+  next: NextFunction
+) => {
   try {
     const origin = socket.handshake.headers.host;
-console.log(origin)
-console.log(allowedOrigin)
-    if(origin && allowedOrigin.includes(origin)){
+    console.log(origin);
+    console.log(allowedOrigin);
+    if (origin && allowedOrigin.includes(origin)) {
       next();
-    }
-    else {
+    } else {
       const err = new Error("CORS error: Origin not allowed");
       next(err); // Deny the connection
     }
   } catch (error) {
-    console.log("socket cors error",error)
+    console.log("socket cors error", error);
   }
-}
+};
