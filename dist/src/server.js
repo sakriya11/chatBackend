@@ -61,8 +61,8 @@ io.on("connection", (socket) => {
     (0, socketmiddleware_1.storingUserSocketId)(socketId, userId);
     // Handle message sending
     socket.on("sendmsg", (data) => {
-        (0, socketmiddleware_1.sendingMsg)(socket, data);
-        const receiverId = socket.handshake.query.userId;
+        const receiverId = data.receiverId;
+        (0, socketmiddleware_1.sendingMsg)(socket, data, receiverId);
         (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg);
         //   const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
         // const receiverId = socket.handshake.query.userId as string; // Assuming this is the recipient's ID
