@@ -33,34 +33,41 @@ const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: index_1.default.app.allowedOrigin,
-        methods: ["POST", "GET"]
-    }
+        methods: ["POST", "GET"],
+    },
 });
 // app.use(cors());
 app.use((0, cors_1.default)({
-    origin: "https://chatfrontend-omega.vercel.app",
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: "https://chatfrontend-omega.vercel.app" || "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
 //  io.use(socketCorsMiddleware);
 // Middleware for socket connections
 io.use(socketmiddleware_1.socketMiddleware);
 // Handle socket connections
 io.on("connection", (socket) => {
-    console.log('Origin:', socket.handshake.headers.origin);
-    console.log("user active", socket.id);
     const userId = socket.data.user.id;
+    if (!userId) {
+        console.error("User ID is missing in socket connection");
+        return;
+    }
+    //joining the user into room
+    // socket.on('join',(userId)=>{
+    //   socket.join(userId);
+    //   console.log(userId,"joined the room")
+    // })
     const socketId = socket.id;
     (0, socketmiddleware_1.storingUserSocketId)(socketId, userId);
     // Handle message sending
     socket.on("sendmsg", (data) => {
-        // sendingMsg(socket, data);
-        // const receiverId = socket.handshake.query.userId as string;
-        // saveMessages(userId, receiverId, data.msg);
-        const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
-        const receiverId = socket.handshake.query.userId; // Assuming this is the recipient's ID
         (0, socketmiddleware_1.sendingMsg)(socket, data);
-        (0, socketmiddleware_1.saveMessages)(senderId, receiverId, data.msg);
+        const receiverId = socket.handshake.query.userId;
+        (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg);
+        //   const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
+        // const receiverId = socket.handshake.query.userId as string; // Assuming this is the recipient's ID
+        // sendingMsg(socket, data);
+        // saveMessages(senderId, receiverId, data.msg);
     });
     // Handle disconnection
     socket.on("disconnect", () => {

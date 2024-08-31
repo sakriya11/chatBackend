@@ -70,11 +70,11 @@ exports.deleteUserSocketId = deleteUserSocketId;
 const sendingMsg = (socket, msg) => {
     try {
         const userId = socket.handshake.query.userId;
-        console.log("userisssss", userId);
+        console.log("receiver id ", userId);
         const userSocketId = (0, exports.getUserSocketIdFromUserId)(userId);
-        console.log("userisssss", userSocketId);
+        console.log("receiver socketid", userSocketId);
         if (userSocketId) {
-            console.log("sdsd", msg);
+            console.log("socket id to receive  the mesages", msg);
             socket.to(userSocketId).emit("receivemsg", {
                 msg,
             });
