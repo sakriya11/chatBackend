@@ -9,6 +9,7 @@ const chatSchema = new Schema(
     conversationId: String,
     isRead: Boolean,
     isDelivered: Boolean,
+    sender:String,
     // messageType: String;
     // attachments?: String
     // status?: String;
@@ -28,6 +29,7 @@ export interface IChat extends Document {
   conversationId?: string;
   isRead: boolean;
   isDelivered: boolean;
+  sender?:string;
 }
 
 const Chat = model<IChat>("Chat", chatSchema);

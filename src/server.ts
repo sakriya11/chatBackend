@@ -16,23 +16,6 @@ import cors from "cors";
 
 const app = Express();
 
-const originRegex = new RegExp(config.app.originRegex);
-// CORS for Express routes
-// const corsOption = {
-//   credentials: true,
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   origin: function (origin: string, callback: any) {
-//     if (!origin) {
-//       callback(null, true);
-//       return;
-//     }
-//     if (config.app.allowedOrigin.indexOf(origin) !== -1 || originRegex.test(origin)) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
@@ -63,12 +46,7 @@ io.on("connection", (socket) => {
     console.error("User ID is missing in socket connection");
     return;
   }
-  //joining the user into room
-  // socket.on('join',(userId)=>{
-  //   socket.join(userId);
-  //   console.log(userId,"joined the room")
 
-  // })
   const socketId = socket.id;
   storingUserSocketId(socketId, userId);
 
@@ -76,13 +54,8 @@ io.on("connection", (socket) => {
   socket.on("sendmsg", (data) => {
     const receiverId = data.receiverId;
 
-    sendingMsg(socket, data,receiverId);
-    saveMessages(userId, receiverId, data.msg);
-
-    //   const senderId = socket.data.user.id; // Sender ID is now coming from socket.data
-    // const receiverId = socket.handshake.query.userId as string; // Assuming this is the recipient's ID
-    // sendingMsg(socket, data);
-    // saveMessages(senderId, receiverId, data.msg);
+    sendingMsg(socket, data, receiverId);
+    saveMessages(userId, receiverId, data.msg ,data.sender);
   });
 
   // Handle disconnection

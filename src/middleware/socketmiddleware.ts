@@ -53,9 +53,9 @@ export const deleteUserSocketId = (userId: string) => {
   }
 };
 
-export const sendingMsg = (socket: Socket, msg: string, receiverId:string) => {
+export const sendingMsg = (socket: Socket, msg: string, receiverId: string) => {
   try {
-    const userId:string = receiverId;
+    const userId: string = receiverId;
     console.log("receiver id ", userId);
     const userSocketId = getUserSocketIdFromUserId(userId);
     console.log("receiver socketid", userSocketId);
@@ -76,13 +76,15 @@ export const sendingMsg = (socket: Socket, msg: string, receiverId:string) => {
 export const saveMessages = async (
   senderId: string,
   receiverId: string,
-  message: string
+  message: string,
+  sender:string
 ) => {
   try {
     await Chat.create({
       senderId: senderId,
       receiverId: receiverId,
       message: message,
+      sender:sender
     });
   } catch (error) {
     console.log("error storing the messages");

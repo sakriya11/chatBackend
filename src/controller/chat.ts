@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import User from "../model/user";
+import User, { IUser } from "../model/user";
+import { IReqUser } from "../middleware/auth";
+import Chat from "../model/chat";
 
 interface responseData {
   id: string;
@@ -9,16 +11,11 @@ interface responseData {
 const chatController = {
   totalUsers: async (req: Request, res: Response): Promise<Response> => {
     try {
-      console.log("origin",req.headers.origin);
-      const userToken = req.header;
-      console.log(userToken);
-
-      const totalUsers = (await User.find());
+      const totalUsers = await User.find();
       if (totalUsers) {
         const userList: responseData[] = [];
 
         totalUsers.forEach((data) => {
-          
           const trimedData = {
             name: data.fullname,
             id: data.id,
@@ -38,6 +35,41 @@ const chatController = {
       console.error("Error fetching users:", error);
       return res.status(500).send({
         message: "Error fetching the users",
+      });
+    }
+  },
+
+  fetchIndividualUserMessages: async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      const selectedUserId: string = req.params.id;
+      const user = (req as IReqUser).user;
+      if (user) {
+        const data = await Chat.find({
+          senderId: user._id,
+          receiverId: selectedUserId,
+        });
+        if (data.length > 0) {
+          return res.status(200).send({
+            data: data,
+          });
+        } else {
+          return res.status(404).send({
+            message: "No conversation stored yet",
+          });
+        }
+      } else {
+        return res.status(404).send({
+          message: "User not found",
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+
+      return res.status(500).send({
+        message: "Error fetching previous messages",
       });
     }
   },
