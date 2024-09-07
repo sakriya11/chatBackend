@@ -7,5 +7,6 @@ const express_1 = require("express");
 const chat_1 = __importDefault(require("../controller/chat"));
 const chatRouter = (0, express_1.Router)();
 chatRouter.get('/get/all/user', chat_1.default.totalUsers);
+chatRouter.get('/get/all/chat/:id', chat_1.default.fetchIndividualUserMessages);
 exports.default = chatRouter;
 //# sourceMappingURL=chat.js.map

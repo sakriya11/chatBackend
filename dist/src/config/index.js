@@ -36,6 +36,9 @@ const config = {
     db: {
         mongoURL: process.env.MONGO_URL
     },
+    frontend: {
+        host: "localhost:3000" || "domainname.com"
+    },
     jwt: {
         secret: process.env.JWT_SECRET,
         issuer: process.env.JWT_ISSUER,

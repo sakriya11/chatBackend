@@ -13,13 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../model/user"));
+const chat_1 = __importDefault(require("../model/chat"));
 const chatController = {
     totalUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log("origin", req.headers.origin);
-            const userToken = req.header;
-            console.log(userToken);
-            const totalUsers = (yield user_1.default.find());
+            const totalUsers = yield user_1.default.find();
             if (totalUsers) {
                 const userList = [];
                 totalUsers.forEach((data) => {
@@ -43,6 +41,39 @@ const chatController = {
             console.error("Error fetching users:", error);
             return res.status(500).send({
                 message: "Error fetching the users",
+            });
+        }
+    }),
+    fetchIndividualUserMessages: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const selectedUserId = req.params.id;
+            const user = req.user;
+            if (user) {
+                const data = yield chat_1.default.find({
+                    senderId: user._id,
+                    receiverId: selectedUserId,
+                });
+                if (data.length > 0) {
+                    return res.status(200).send({
+                        data: data,
+                    });
+                }
+                else {
+                    return res.status(404).send({
+                        message: "No conversation stored yet",
+                    });
+                }
+            }
+            else {
+                return res.status(404).send({
+                    message: "User not found",
+                });
+            }
+        }
+        catch (error) {
+            console.log("error", error);
+            return res.status(500).send({
+                message: "Error fetching previous messages",
             });
         }
     }),
