@@ -29,7 +29,7 @@ export interface IChat extends Document {
   conversationId?: string;
   isRead: boolean;
   isDelivered: boolean;
-  sender?:string;
+  sender:string;
 }
 
 const Chat = model<IChat>("Chat", chatSchema);

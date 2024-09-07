@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
     // Handle message sending
     socket.on("sendmsg", (data) => {
         const receiverId = data.receiverId;
+        console.log("sender", data.sender);
         (0, socketmiddleware_1.sendingMsg)(socket, data, receiverId);
         (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg, data.sender);
     });

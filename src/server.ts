@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
   // Handle message sending
   socket.on("sendmsg", (data) => {
     const receiverId = data.receiverId;
-
+    console.log("sender",data.sender)
     sendingMsg(socket, data, receiverId);
     saveMessages(userId, receiverId, data.msg ,data.sender);
   });
