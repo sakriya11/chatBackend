@@ -48,8 +48,7 @@ const chatController = {
       const user = (req as IReqUser).user;
       if (user) {
         const data = await Chat.find({
-          senderId: user._id,
-          receiverId: selectedUserId,
+          $or: [{ senderId: user._id, receiverId: selectedUserId }],
         });
         if (data.length > 0) {
           return res.status(200).send({
