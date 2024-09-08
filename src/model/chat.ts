@@ -3,7 +3,7 @@ import { IUser } from "./user";
 
 const chatSchema = new Schema(
   {
-    message: String,
+    msg: String,
     senderId: { type: Schema.Types.ObjectId, ref: "IUser"},
     receiverId: { type: Schema.Types.ObjectId, ref: "IUser"},
     conversationId: String,
@@ -23,7 +23,7 @@ const chatSchema = new Schema(
 );
 
 export interface IChat extends Document {
-  message: string;
+  msg: string;
   senderId: IUser["_id"];
   receiverId: IUser["_id"];
   conversationId?: string;

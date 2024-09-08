@@ -83,7 +83,7 @@ export const saveMessages = async (
     await Chat.create({
       senderId: senderId,
       receiverId: receiverId,
-      message: message,
+      msg: message,
       sender:sender
     });
   } catch (error) {

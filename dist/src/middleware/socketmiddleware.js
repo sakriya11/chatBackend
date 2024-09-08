@@ -93,7 +93,7 @@ const saveMessages = (senderId, receiverId, message, sender) => __awaiter(void 0
         yield chat_1.default.create({
             senderId: senderId,
             receiverId: receiverId,
-            message: message,
+            msg: message,
             sender: sender
         });
     }
