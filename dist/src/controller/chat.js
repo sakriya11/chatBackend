@@ -50,8 +50,10 @@ const chatController = {
             const user = req.user;
             if (user) {
                 const data = yield chat_1.default.find({
-                    senderId: user._id,
-                    receiverId: selectedUserId,
+                    $or: [
+                        { $and: [{ senderId: user._id }, { receiverId: selectedUserId }] },
+                        { $and: [{ senderId: selectedUserId }, { receiverId: user._id }] }
+                    ]
                 });
                 if (data.length > 0) {
                     return res.status(200).send({
