@@ -80,6 +80,7 @@ export const saveMessages = async (
   sender:string
 ) => {
   try {
+    console.log("senderrrrrrrrrrrr",sender)
     await Chat.create({
       senderId: senderId,
       receiverId: receiverId,
