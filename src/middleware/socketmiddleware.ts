@@ -77,15 +77,12 @@ export const saveMessages = async (
   senderId: string,
   receiverId: string,
   message: string,
-  sender:string
 ) => {
   try {
-    console.log("senderrrrrrrrrrrr",sender)
     await Chat.create({
       senderId: senderId,
       receiverId: receiverId,
       msg: message,
-      sender:sender
     });
   } catch (error) {
     console.log("error storing the messages");

@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
     const receiverId = data.receiverId;
     console.log("sender",data.sender)
     sendingMsg(socket, data, receiverId);
-    saveMessages(userId, receiverId, data.msg ,data.sender);
+    saveMessages(userId, receiverId, data.msg);
   });
 
   // Handle disconnection
