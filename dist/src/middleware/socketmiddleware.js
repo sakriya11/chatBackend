@@ -88,13 +88,12 @@ const sendingMsg = (socket, msg, receiverId) => {
     }
 };
 exports.sendingMsg = sendingMsg;
-const saveMessages = (senderId, receiverId, message, sender) => __awaiter(void 0, void 0, void 0, function* () {
+const saveMessages = (senderId, receiverId, message) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield chat_1.default.create({
             senderId: senderId,
             receiverId: receiverId,
             msg: message,
-            sender: sender
         });
     }
     catch (error) {

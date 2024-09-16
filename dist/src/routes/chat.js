@@ -8,5 +8,6 @@ const chat_1 = __importDefault(require("../controller/chat"));
 const chatRouter = (0, express_1.Router)();
 chatRouter.get('/get/all/user', chat_1.default.totalUsers);
 chatRouter.get('/get/all/chat/:id', chat_1.default.fetchIndividualUserMessages);
+chatRouter.patch('/update/status/:id', chat_1.default.updateUserStatus);
 exports.default = chatRouter;
 //# sourceMappingURL=chat.js.map

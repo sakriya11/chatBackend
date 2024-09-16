@@ -90,7 +90,6 @@ const authController = {
     }),
     login: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log("headers", req.headers.origin);
             const { email, password } = req.body;
             const user = yield user_1.default.findOne({ email: email });
             if (!user) {
@@ -100,7 +99,7 @@ const authController = {
             }
             if (user.emailVerified == false) {
                 return res.status(409).send({
-                    message: "Verify email and try logging back to your account"
+                    message: "Verify email and try logging back to your account",
                 });
             }
             const passwordIsValid = bcryptjs_1.default.compareSync(password, user.password);
@@ -117,6 +116,11 @@ const authController = {
             });
             const resUser = user.toJSON();
             delete resUser.password;
+            yield user_1.default.findByIdAndUpdate({
+                _id: user.id,
+            }, {
+                active: true,
+            });
             return res.status(200).send({
                 message: "Logged in succesfully",
                 accessToken: token,

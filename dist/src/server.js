@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
         const receiverId = data.receiverId;
         console.log("sender", data.sender);
         (0, socketmiddleware_1.sendingMsg)(socket, data, receiverId);
-        (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg, data.sender);
+        (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg);
     });
     // Handle disconnection
     socket.on("disconnect", () => {
