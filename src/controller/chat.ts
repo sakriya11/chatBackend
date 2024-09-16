@@ -19,7 +19,7 @@ const chatController = {
           const trimedData = {
             name: data.fullname,
             id: data.id,
-            status:data.active
+            status: data.active,
           };
           userList.push(trimedData);
         });
@@ -51,8 +51,8 @@ const chatController = {
         const data = await Chat.find({
           $or: [
             { $and: [{ senderId: user._id }, { receiverId: selectedUserId }] },
-            { $and: [{ senderId: selectedUserId }, { receiverId: user._id }] }
-          ]
+            { $and: [{ senderId: selectedUserId }, { receiverId: user._id }] },
+          ],
         });
         if (data.length > 0) {
           return res.status(200).send({
@@ -74,6 +74,22 @@ const chatController = {
       return res.status(500).send({
         message: "Error fetching previous messages",
       });
+    }
+  },
+
+  updateUserStatus: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      await User.findByIdAndUpdate(
+        {
+          _id: id,
+        },
+        {
+          active: false,
+        }
+      );
+    } catch (error) {
+      console.log(error);
     }
   },
 };
