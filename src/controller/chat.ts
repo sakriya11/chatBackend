@@ -88,6 +88,7 @@ const chatController = {
           active: false,
         }
       );
+      return 
     } catch (error) {
       console.log(error);
     }
