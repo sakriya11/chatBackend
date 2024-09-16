@@ -19,6 +19,7 @@ const chatController = {
           const trimedData = {
             name: data.fullname,
             id: data.id,
+            status:data.active
           };
           userList.push(trimedData);
         });

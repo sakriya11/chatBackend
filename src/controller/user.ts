@@ -91,7 +91,6 @@ const authController = {
 
   login: async (req: Request, res: Response): Promise<Response> => {
     try {
-        console.log("headers",req.headers.origin)
       const { email, password } = req.body;
       const user = await User.findOne({ email: email });
       if (!user) {
@@ -99,10 +98,10 @@ const authController = {
           message: "User does not exist please register",
         });
       }
-      if(user.emailVerified == false){
+      if (user.emailVerified == false) {
         return res.status(409).send({
-          message:"Verify email and try logging back to your account"
-        })
+          message: "Verify email and try logging back to your account",
+        });
       }
       const passwordIsValid = bcrypt.compareSync(password, user.password);
       if (!passwordIsValid) {
@@ -123,6 +122,15 @@ const authController = {
       );
       const resUser = user.toJSON();
       delete resUser.password;
+
+      await User.findByIdAndUpdate(
+        {
+          _id: user.id,
+        },
+        {
+          active: true,
+        }
+      );
 
       return res.status(200).send({
         message: "Logged in succesfully",
