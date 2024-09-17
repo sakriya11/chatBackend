@@ -82,13 +82,16 @@ const chatController = {
     }),
     updateUserStatus: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            console.log("hereeeeeeeee");
             const { id } = req.params;
             yield user_1.default.findByIdAndUpdate({
                 _id: id,
             }, {
                 active: false,
             });
-            return res.status(200);
+            return res.status(200).send({
+                message: "status updated"
+            });
         }
         catch (error) {
             console.log(error);
