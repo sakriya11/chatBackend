@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../model/user";
+import User from "../model/user";
 import { IReqUser } from "../middleware/auth";
 import Chat from "../model/chat";
 
@@ -11,11 +11,15 @@ interface responseData {
 const chatController = {
   totalUsers: async (req: Request, res: Response): Promise<Response> => {
     try {
+      const userId = (req as IReqUser).user;
       const totalUsers = await User.find();
-      if (totalUsers) {
+      const filteredUser = totalUsers.filter(
+        (item) => item._id.toString() !== userId._id.toString()
+      );
+      if (filteredUser) {
         const userList: responseData[] = [];
 
-        totalUsers.forEach((data) => {
+        filteredUser.forEach((data) => {
           const trimedData = {
             name: data.fullname,
             id: data.id,
@@ -79,7 +83,6 @@ const chatController = {
 
   updateUserStatus: async (req: Request, res: Response): Promise<Response> => {
     try {
-      console.log("hereeeeeeeee")
       const { id } = req.params;
       await User.findByIdAndUpdate(
         {
@@ -90,7 +93,7 @@ const chatController = {
         }
       );
       return res.status(200).send({
-        message:"status updated"
+        message: "status updated",
       });
     } catch (error) {
       console.log(error);

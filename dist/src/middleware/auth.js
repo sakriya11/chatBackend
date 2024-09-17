@@ -43,15 +43,6 @@ const authMiddleware = {
             });
             const user = yield user_1.default.findById(decoded.id).select("-password");
             if (user) {
-                // if (user.status !== "active") {
-                //   res.status(403).send({
-                //     ok: false,
-                //     code: "account_not_active",
-                //     message:
-                //       "Account status is not active. Please verify your account or contact administrator.",
-                //   });
-                //   return;
-                // }
                 req.user = user;
             }
             else {

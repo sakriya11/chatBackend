@@ -17,10 +17,12 @@ const chat_1 = __importDefault(require("../model/chat"));
 const chatController = {
     totalUsers: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            const userId = req.user;
             const totalUsers = yield user_1.default.find();
-            if (totalUsers) {
+            const filteredUser = totalUsers.filter((item) => item._id.toString() !== userId._id.toString());
+            if (filteredUser) {
                 const userList = [];
-                totalUsers.forEach((data) => {
+                filteredUser.forEach((data) => {
                     const trimedData = {
                         name: data.fullname,
                         id: data.id,
@@ -82,7 +84,6 @@ const chatController = {
     }),
     updateUserStatus: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            console.log("hereeeeeeeee");
             const { id } = req.params;
             yield user_1.default.findByIdAndUpdate({
                 _id: id,
@@ -90,7 +91,7 @@ const chatController = {
                 active: false,
             });
             return res.status(200).send({
-                message: "status updated"
+                message: "status updated",
             });
         }
         catch (error) {
