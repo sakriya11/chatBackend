@@ -21,7 +21,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: config.app.allowedOrigin,
-    methods: ["POST", "GET"],
+    methods: ["POST", "GET",'PATCH'],
   },
 });
 
@@ -30,7 +30,7 @@ const io = new Server(httpServer, {
 app.use(
   cors({
     origin: "https://chatfrontend-omega.vercel.app" || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );

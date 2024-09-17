@@ -88,6 +88,18 @@ const chatController = {
             }, {
                 active: false,
             });
+            return res.status(200);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }),
+    deleteSingleChat: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const { id } = req.params;
+            yield chat_1.default.findByIdAndDelete({
+                _id: id,
+            });
             return;
         }
         catch (error) {
