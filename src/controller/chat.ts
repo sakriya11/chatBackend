@@ -79,6 +79,7 @@ const chatController = {
 
   updateUserStatus: async (req: Request, res: Response): Promise<Response> => {
     try {
+      console.log("hereeeeeeeee")
       const { id } = req.params;
       await User.findByIdAndUpdate(
         {
@@ -88,7 +89,9 @@ const chatController = {
           active: false,
         }
       );
-      return res.status(200);
+      return res.status(200).send({
+        message:"status updated"
+      });
     } catch (error) {
       console.log(error);
     }
