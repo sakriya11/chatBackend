@@ -77,7 +77,7 @@ const chatController = {
     }
   },
 
-  updateUserStatus: async (req: Request, res: Response): Promise<void> => {
+  updateUserStatus: async (req: Request, res: Response): Promise<Response> => {
     try {
       const { id } = req.params;
       await User.findByIdAndUpdate(
@@ -88,7 +88,19 @@ const chatController = {
           active: false,
         }
       );
-      return 
+      return res.status(200);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  deleteSingleChat: async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      await Chat.findByIdAndDelete({
+        _id: id,
+      });
+      return;
     } catch (error) {
       console.log(error);
     }
