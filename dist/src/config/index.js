@@ -30,14 +30,14 @@ const config = {
         port: process.env.PORT,
         host: process.env.HOST,
         url: process.env.URL,
-        allowedOrigin: process.env.ALLOWED_ORIGIN || "https://chatfrontend-omega.vercel.app",
+        allowedOrigin: process.env.ALLOWED_ORIGIN || "http://localhost:3000",
         originRegex: process.env.ORIGIN_REGEX
     },
     db: {
         mongoURL: process.env.MONGO_URL
     },
     frontend: {
-        host: "localhost:3000" || "domainname.com"
+        host: ["http://localhost:3000", "domainname.com"]
     },
     jwt: {
         secret: process.env.JWT_SECRET,

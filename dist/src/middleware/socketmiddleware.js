@@ -67,17 +67,22 @@ const deleteUserSocketId = (userId) => {
     }
 };
 exports.deleteUserSocketId = deleteUserSocketId;
-const sendingMsg = (socket, msg, receiverId) => {
+const sendingMsg = (socket, msg, receiverId, image) => {
     try {
         const userId = receiverId;
-        console.log("receiver id ", userId);
         const userSocketId = (0, exports.getUserSocketIdFromUserId)(userId);
-        console.log("receiver socketid", userSocketId);
         if (userSocketId) {
-            console.log("socket id to receive  the mesages", msg);
-            socket.to(userSocketId).emit("receivemsg", {
-                msg,
-            });
+            if (image) {
+                socket.to(userSocketId).emit("receivemsg", {
+                    image,
+                });
+            }
+            // console.log("socket id to receive  the mesages", msg);
+            if (msg) {
+                socket.to(userSocketId).emit("receivemsg", {
+                    msg,
+                });
+            }
         }
         else {
             console.log(`${userSocketId} is not active`);
@@ -88,12 +93,13 @@ const sendingMsg = (socket, msg, receiverId) => {
     }
 };
 exports.sendingMsg = sendingMsg;
-const saveMessages = (senderId, receiverId, message) => __awaiter(void 0, void 0, void 0, function* () {
+const saveMessages = (senderId, receiverId, message, image) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield chat_1.default.create({
             senderId: senderId,
             receiverId: receiverId,
             msg: message,
+            image: image,
         });
     }
     catch (error) {

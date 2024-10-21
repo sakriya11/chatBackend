@@ -8,6 +8,7 @@ const chatSchema = new mongoose_1.Schema({
     conversationId: String,
     isRead: Boolean,
     isDelivered: Boolean,
+    image: String
     // messageType: String;
     // attachments?: String
     // status?: String;

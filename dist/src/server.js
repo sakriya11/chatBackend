@@ -16,12 +16,13 @@ const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: index_1.default.app.allowedOrigin,
-        methods: ["POST", "GET", 'PATCH'],
+        // origin: "http://localhost:3000",
+        methods: ["POST", "GET", "PATCH"],
     },
 });
 // app.use(cors());
 app.use((0, cors_1.default)({
-    origin: "https://chatfrontend-omega.vercel.app" || "http://localhost:3000",
+    origin: ["https://chatfrontend-icbn.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
@@ -40,9 +41,8 @@ io.on("connection", (socket) => {
     // Handle message sending
     socket.on("sendmsg", (data) => {
         const receiverId = data.receiverId;
-        console.log("sender", data.sender);
-        (0, socketmiddleware_1.sendingMsg)(socket, data, receiverId);
-        (0, socketmiddleware_1.saveMessages)(userId, receiverId, data.msg);
+        (0, socketmiddleware_1.sendingMsg)(socket, data.msg, receiverId, data.image);
+        (0, socketmiddleware_1.saveMessages)(userId, receiverId, data === null || data === void 0 ? void 0 : data.msg, data === null || data === void 0 ? void 0 : data.image);
     });
     // Handle disconnection
     socket.on("disconnect", () => {
