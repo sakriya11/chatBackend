@@ -101,21 +101,20 @@ export const saveMessages = async (
   }
 };
 
-export const socketCorsMiddleware = async (
-  socket: Socket,
-  next: NextFunction
-) => {
+export const joinVideoChatRoom = (
+  socket:Socket,
+  roomId:string,
+  peerId:string
+)=>{
   try {
-    const origin = socket.handshake.headers.host;
-    console.log(origin);
-    console.log(allowedOrigin);
-    if (origin && allowedOrigin.includes(origin)) {
-      next();
-    } else {
-      const err = new Error("CORS error: Origin not allowed");
-      next(err); // Deny the connection
-    }
+    socket.join(roomId);
+    socket.to(roomId).emit('user-connected', peerId);
+
+    socket.on('disconnect', () => {
+      socket.to(roomId).emit('user-disconnected', peerId);
+    });
   } catch (error) {
-    console.log("socket cors error", error);
+    console.log("error coonecting user to room",error)
   }
-};
+
+}

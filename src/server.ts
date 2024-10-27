@@ -10,7 +10,7 @@ import {
   deleteUserSocketId,
   sendingMsg,
   saveMessages,
-  // socketCorsMiddleware,
+  joinVideoChatRoom,
 } from "./middleware/socketmiddleware";
 import cors from "cors";
 
@@ -42,6 +42,11 @@ io.use(socketMiddleware);
 
 // Handle socket connections
 io.on("connection", (socket) => {
+  //creating room 
+  socket.on('join-room', (roomId, peerId) => {
+    joinVideoChatRoom(socket,roomId,peerId);
+  });
+
   const userId = socket.data.user.id;
   if (!userId) {
     console.error("User ID is missing in socket connection");
@@ -50,6 +55,7 @@ io.on("connection", (socket) => {
 
   const socketId = socket.id;
   storingUserSocketId(socketId, userId);
+
   // Handle message sending
   socket.on("sendmsg", (data) => {
     const receiverId = data.receiverId;
