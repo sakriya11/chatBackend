@@ -110,6 +110,22 @@ const chatController = {
             console.log(error);
         }
     }),
+    generateuserId: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const digit = 5;
+            let random;
+            do {
+                random = Math.floor(Math.random() * Math.pow(10, digit));
+            } while (random < Math.pow(10, (digit - 1)));
+            const randomNumber = `Roomid-${random}`;
+            return res.send({
+                data: randomNumber
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }),
 };
 exports.default = chatController;
 //# sourceMappingURL=chat.js.map

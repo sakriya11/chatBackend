@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../model/user";
 import { IReqUser } from "../middleware/auth";
 import Chat from "../model/chat";
+import { promises } from "dns";
 
 interface responseData {
   id: string;
@@ -107,6 +108,22 @@ const chatController = {
         _id: id,
       });
       return;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  generateuserId: async(req:Request,res:Response) => {
+    try {
+      const digit = 5;
+      let random;
+      do {
+        random = Math.floor(Math.random() * 10 ** digit);
+      } while (random < 10 ** (digit - 1));
+      const randomNumber = `Roomid-${random}`;
+      return res.send({
+        data:randomNumber
+      })
     } catch (error) {
       console.log(error);
     }

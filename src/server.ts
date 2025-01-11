@@ -11,6 +11,7 @@ import {
   sendingMsg,
   saveMessages,
   joinVideoChatRoom,
+  sendCallRequest,
 } from "./middleware/socketmiddleware";
 import cors from "cors";
 
@@ -20,8 +21,8 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: config.app.allowedOrigin,
-    // origin: "http://localhost:3000",
+    // origin: config.app.allowedOrigin,
+    origin: ["https://chatfrontend-icbn.vercel.app","http://localhost:3000"],
     methods: ["POST", "GET", "PATCH"],
   },
 });
@@ -42,9 +43,17 @@ io.use(socketMiddleware);
 
 // Handle socket connections
 io.on("connection", (socket) => {
-  //creating room 
-  socket.on('join-room', (roomId, peerId) => {
-    joinVideoChatRoom(socket,roomId,peerId);
+  socket.on("call-request", ({ userId, roomId, callerName }) => {
+    sendCallRequest(userId, roomId, callerName, socket);
+  });
+
+  //starting video chat
+  socket.on("call-accept", (roomId) => {
+    joinVideoChatRoom(socket, roomId);
+  });
+
+  socket.on("videochat-started", (roomId) => {
+    joinVideoChatRoom(socket, roomId);
   });
 
   const userId = socket.data.user.id;

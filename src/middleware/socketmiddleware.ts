@@ -102,19 +102,47 @@ export const saveMessages = async (
 };
 
 export const joinVideoChatRoom = (
-  socket:Socket,
-  roomId:string,
-  peerId:string
-)=>{
+  socket: Socket,
+  roomId: string
+  // peerId: string
+) => {
   try {
-    socket.join(roomId);
-    socket.to(roomId).emit('user-connected', peerId);
+    console.log("first user entered");
+    socket.on("join-room", ({ roomId, peerId }) => {
+      console.log("peerid", peerId);
+      console.log("roomiddd", roomId);
+      socket.join(roomId);
 
-    socket.on('disconnect', () => {
-      socket.to(roomId).emit('user-disconnected', peerId);
+      socket.to(roomId).emit("user-connected", peerId);
+      console.log(`${peerId} joined the room in ${roomId}`);
+    });
+    socket.on("leave-room", ({ roomId }) => {
+      socket.leave(roomId);
+      socket.to(roomId).emit("user-disconnected", socket.id);
+      console.log(`User ${socket.id} left the room ${roomId}`);
     });
   } catch (error) {
-    console.log("error coonecting user to room",error)
+    console.log("error coonecting user to room", error);
   }
+};
 
-}
+export const sendCallRequest = (
+  userId: string,
+  roomId: string,
+  callerName: string,
+  socket: Socket
+) => {
+  try {
+    const socketId = getUserSocketIdFromUserId(userId);
+    if (socketId) {
+      socket.to(socketId).emit("incommingcall", {
+        callerName: callerName,
+        roomid: roomId,
+      });
+    } else {
+      console.log("user trying to call is not connected");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

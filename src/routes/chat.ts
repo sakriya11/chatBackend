@@ -3,9 +3,11 @@ import chatController from "../controller/chat";
 
 const chatRouter = Router();
 
-chatRouter.get('/get/all/user',chatController.totalUsers)
-chatRouter.get('/get/all/chat/:id',chatController.fetchIndividualUserMessages)
-chatRouter.patch('/update/status/:id',chatController.updateUserStatus)
-chatRouter.delete('/delete/:id',chatController.deleteSingleChat);
+chatRouter
+  .get("/get/all/user", chatController.totalUsers)
+  .get("/get/all/chat/:id", chatController.fetchIndividualUserMessages)
+  .patch("/update/status/:id", chatController.updateUserStatus)
+  .delete("/delete/:id", chatController.deleteSingleChat)
+  .get("/get/roomid", chatController.generateuserId);
 
 export default chatRouter;

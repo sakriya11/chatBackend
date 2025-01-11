@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.socketCorsMiddleware = exports.saveMessages = exports.sendingMsg = exports.deleteUserSocketId = exports.getUserSocketIdFromUserId = exports.storingUserSocketId = exports.socketMiddleware = void 0;
+exports.sendCallRequest = exports.joinVideoChatRoom = exports.saveMessages = exports.sendingMsg = exports.deleteUserSocketId = exports.getUserSocketIdFromUserId = exports.storingUserSocketId = exports.socketMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../config"));
 const chat_1 = __importDefault(require("../model/chat"));
@@ -107,22 +107,45 @@ const saveMessages = (senderId, receiverId, message, image) => __awaiter(void 0,
     }
 });
 exports.saveMessages = saveMessages;
-const socketCorsMiddleware = (socket, next) => __awaiter(void 0, void 0, void 0, function* () {
+const joinVideoChatRoom = (socket, roomId
+// peerId: string
+) => {
     try {
-        const origin = socket.handshake.headers.host;
-        console.log(origin);
-        console.log(allowedOrigin);
-        if (origin && allowedOrigin.includes(origin)) {
-            next();
+        console.log("first user entered");
+        socket.on("join-room", ({ roomId, peerId }) => {
+            console.log("peerid", peerId);
+            console.log("roomiddd", roomId);
+            socket.join(roomId);
+            socket.to(roomId).emit("user-connected", peerId);
+            console.log(`${peerId} joined the room in ${roomId}`);
+        });
+        socket.on("leave-room", ({ roomId }) => {
+            socket.leave(roomId);
+            socket.to(roomId).emit("user-disconnected", socket.id);
+            console.log(`User ${socket.id} left the room ${roomId}`);
+        });
+    }
+    catch (error) {
+        console.log("error coonecting user to room", error);
+    }
+};
+exports.joinVideoChatRoom = joinVideoChatRoom;
+const sendCallRequest = (userId, roomId, callerName, socket) => {
+    try {
+        const socketId = (0, exports.getUserSocketIdFromUserId)(userId);
+        if (socketId) {
+            socket.to(socketId).emit("incommingcall", {
+                callerName: callerName,
+                roomid: roomId,
+            });
         }
         else {
-            const err = new Error("CORS error: Origin not allowed");
-            next(err); // Deny the connection
+            console.log("user trying to call is not connected");
         }
     }
     catch (error) {
-        console.log("socket cors error", error);
+        console.log(error);
     }
-});
-exports.socketCorsMiddleware = socketCorsMiddleware;
+};
+exports.sendCallRequest = sendCallRequest;
 //# sourceMappingURL=socketmiddleware.js.map

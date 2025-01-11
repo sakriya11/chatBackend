@@ -15,8 +15,8 @@ const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: index_1.default.app.allowedOrigin,
-        // origin: "http://localhost:3000",
+        // origin: config.app.allowedOrigin,
+        origin: ["https://chatfrontend-icbn.vercel.app", "http://localhost:3000"],
         methods: ["POST", "GET", "PATCH"],
     },
 });
@@ -31,6 +31,16 @@ app.use((0, cors_1.default)({
 io.use(socketmiddleware_1.socketMiddleware);
 // Handle socket connections
 io.on("connection", (socket) => {
+    socket.on("call-request", ({ userId, roomId, callerName }) => {
+        (0, socketmiddleware_1.sendCallRequest)(userId, roomId, callerName, socket);
+    });
+    //starting video chat
+    socket.on("call-accept", (roomId) => {
+        (0, socketmiddleware_1.joinVideoChatRoom)(socket, roomId);
+    });
+    socket.on("videochat-started", (roomId) => {
+        (0, socketmiddleware_1.joinVideoChatRoom)(socket, roomId);
+    });
     const userId = socket.data.user.id;
     if (!userId) {
         console.error("User ID is missing in socket connection");
