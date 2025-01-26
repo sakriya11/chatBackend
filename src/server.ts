@@ -22,7 +22,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     // origin: config.app.allowedOrigin,
-    origin: ["https://chatfrontend-icbn.vercel.app","http://localhost:3000"],
+    origin: ["https://chatfrontend-icbn.vercel.app"],
     methods: ["POST", "GET", "PATCH"],
   },
 });
@@ -31,7 +31,9 @@ const io = new Server(httpServer, {
 
 app.use(
   cors({
-    origin: ["https://chatfrontend-icbn.vercel.app", "http://localhost:3000"],
+    // origin: config.app.allowedOrigin,
+
+    origin: ["https://chatfrontend-icbn.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

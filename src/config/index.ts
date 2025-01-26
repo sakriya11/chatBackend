@@ -7,7 +7,7 @@ const config = {
     port: process.env.PORT,
     host: process.env.HOST,
     url: process.env.URL,
-    allowedOrigin:process.env.ALLOWED_ORIGIN||"http://localhost:3000",
+    allowedOrigin:process.env.ALLOWED_ORIGIN,
     originRegex:process.env.ORIGIN_REGEX
   },
   db:{
@@ -33,3 +33,7 @@ const config = {
 };
 
 export default config;
+
+
+
+

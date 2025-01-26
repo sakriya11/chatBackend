@@ -16,13 +16,14 @@ const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
         // origin: config.app.allowedOrigin,
-        origin: ["https://chatfrontend-icbn.vercel.app", "http://localhost:3000"],
+        origin: ["https://chatfrontend-icbn.vercel.app"],
         methods: ["POST", "GET", "PATCH"],
     },
 });
 // app.use(cors());
 app.use((0, cors_1.default)({
-    origin: ["https://chatfrontend-icbn.vercel.app", "http://localhost:3000"],
+    // origin: config.app.allowedOrigin,
+    origin: ["https://chatfrontend-icbn.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
